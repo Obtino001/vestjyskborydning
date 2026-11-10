@@ -1,0 +1,39 @@
+{%- doc -%}
+  Renders payment icons in a fixed order: MobilePay · Visa · Mastercard · Apple Pay.
+  Uses the matching type name from shop.enabled_payment_types when available,
+  so Shopify's own icon is used; otherwise falls back to the standard icon name.
+
+  @param {string} [class] - Additional class for the list, e.g. 'list-payment--compact'.
+
+  @example
+  {% render 'payment-icons', class: 'list-payment--compact' %}
+{%- enddoc -%}
+{%- liquid
+  comment
+    Each entry is "match-token:fallback-icon-name".
+  endcomment
+  assign wanted = 'mobile:mobilepay,visa:visa,master:master,apple:apple_pay' | split: ','
+-%}
+<ul
+  class="list list-payment{% if class %} {{ class }}{% endif %}"
+  role="list"
+  aria-label="{{ 'sections.footer.payment' | t | escape }}"
+>
+  {%- for entry in wanted -%}
+    {%- liquid
+      assign parts = entry | split: ':'
+      assign token = parts[0]
+      assign type_name = parts[1]
+      for enabled_type in shop.enabled_payment_types
+        if enabled_type contains token
+          assign type_name = enabled_type
+          break
+        endif
+      endfor
+    -%}
+    <li class="list-payment__item">
+      {{ type_name | payment_type_svg_tag: class: 'icon icon--full-color' }}
+    </li>
+  {%- endfor -%}
+</ul>
+

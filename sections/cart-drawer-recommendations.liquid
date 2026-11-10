@@ -1,0 +1,78 @@
+{%- comment -%}
+  Cart drawer recommendations.
+  Fetched by assets/cart-drawer-recommendations.js through the Product Recommendations API:
+  /recommendations/products?section_id=cart-drawer-recommendations&product_id=…&limit=10
+  Shows max 3 products that are in stock and not already in the cart.
+{%- endcomment -%}
+{%- assign shown = 0 -%}
+<div class="cart-recs__inner">
+  {%- if recommendations.performed? and recommendations.products_count > 0 -%}
+    <ul class="cart-recs__list" role="list">
+      {%- for rec in recommendations.products -%}
+        {%- liquid
+          if shown >= 3
+            break
+          endif
+
+          unless rec.available
+            continue
+          endunless
+
+          assign in_cart = false
+          for item in cart.items
+            if item.product_id == rec.id
+              assign in_cart = true
+              break
+            endif
+          endfor
+          if in_cart
+            continue
+          endif
+
+          assign variant = rec.selected_or_first_available_variant
+          unless variant.available
+            continue
+          endunless
+
+          assign shown = shown | plus: 1
+        -%}
+        <li class="cart-recs__item">
+          <a href="{{ rec.url }}" class="cart-recs__media" tabindex="-1" aria-hidden="true">
+            {%- if rec.featured_media -%}
+              {%- assign rec_alt = rec.featured_media.alt | default: rec.title | escape -%}
+              {{
+                rec.featured_media
+                | image_url: width: 300
+                | image_tag: loading: 'lazy', widths: '150, 300', sizes: '120px', alt: rec_alt
+              }}
+            {%- endif -%}
+          </a>
+          <a href="{{ rec.url }}" class="cart-recs__title">{{ rec.title | escape }}</a>
+          <div class="card-information cart-recs__price">
+            {%- render 'price', product: rec, price_class: '' -%}
+          </div>
+          <div class="cart-recs__actions">
+            <button
+              type="button"
+              class="cart-recs__add button button--secondary"
+              data-variant-id="{{ variant.id }}"
+              aria-label="{{ 'products.product.add_to_cart' | t }}: {{ rec.title | escape }}"
+            >
+              <span>{{ 'products.product.add_to_cart' | t }}</span>
+              {%- render 'loading-spinner' -%}
+            </button>
+            <p class="cart-recs__error" role="alert" hidden></p>
+          </div>
+        </li>
+      {%- endfor -%}
+    </ul>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Cart drawer recommendations",
+  "settings": []
+}
+{% endschema %}
+
