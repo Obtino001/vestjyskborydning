@@ -84,9 +84,15 @@
   text-decoration: none;
 }
 
+.price--on-sale .price-item--vurdering {
+  font-weight: 400;
+  color: #6b6b6b;
+}
+
 .price--on-sale .price-item--sale {
   display: block;
-  font-weight: bold;
+  font-weight: 700;
+  color: rgb(var(--color-foreground));
 }
 
 .unit-price {
