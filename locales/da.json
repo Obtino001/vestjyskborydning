@@ -280,7 +280,7 @@
       "caption": "Varer i indkøbskurv",
       "remove_title": "Fjern {{ title }}",
       "note": "Særlige instruktioner til ordre",
-      "checkout": "Gå til betaling",
+      "checkout": "Gå til kassen",
       "empty": "Din indkøbskurv er tom",
       "product_disclosure": "Produktdeklaration",
       "product_disclosures": "Produktdeklarationer",

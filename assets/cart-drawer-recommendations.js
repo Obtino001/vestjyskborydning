@@ -1,12 +1,11 @@
 /**
  * <cart-drawer-recommendations>
- * Loads up to 3 in-stock product recommendations (based on the last item added
- * to the cart) into the cart drawer, and adds them to the cart without leaving it.
+ * Loads in-stock product recommendations (based on the last item added
+ * to the cart) into the cart drawer in a Dore & Rose style carousel,
+ * and adds them to the cart without leaving the drawer.
  * The block stays hidden when the API returns nothing usable.
  */
 if (!customElements.get('cart-drawer-recommendations')) {
-  // The drawer is fully re-rendered on every cart change, so cache responses
-  // per URL to avoid flicker and repeated requests.
   const cartRecsCache = new Map();
 
   class CartDrawerRecommendations extends HTMLElement {
@@ -56,7 +55,7 @@ if (!customElements.get('cart-drawer-recommendations')) {
     }
 
     onClick = (event) => {
-      const button = event.target.closest('.cart-recs__add');
+      const button = event.target.closest('.cart-recs__add-button, .cart-recs__add');
       if (!button || !this.contains(button)) return;
       event.preventDefault();
       this.addToCart(button);
@@ -68,11 +67,9 @@ if (!customElements.get('cart-drawer-recommendations')) {
       const cartDrawer = document.querySelector('cart-drawer');
       const variantId = Number(button.dataset.variantId);
       const errorEl = button.parentElement.querySelector('.cart-recs__error');
-      const spinner = button.querySelector('.loading__spinner');
 
       button.setAttribute('aria-disabled', 'true');
       button.classList.add('loading');
-      spinner?.classList.remove('hidden');
       if (errorEl) errorEl.hidden = true;
 
       const body = {
@@ -91,17 +88,15 @@ if (!customElements.get('cart-drawer-recommendations')) {
         .then((response) => response.json())
         .then((data) => {
           if (data.status) {
-            // Error, e.g. the item was sold in the meantime.
             if (errorEl) {
               errorEl.textContent = data.description || data.message || '';
               errorEl.hidden = false;
             }
+            button.removeAttribute('aria-disabled');
             button.classList.remove('loading');
-            spinner?.classList.add('hidden');
             return;
           }
 
-          // Recommendations depend on cart contents; clear cache so the next render refetches.
           cartRecsCache.clear();
 
           if (typeof publish === 'function' && typeof PUB_SUB_EVENTS !== 'undefined') {
@@ -121,7 +116,6 @@ if (!customElements.get('cart-drawer-recommendations')) {
         .catch(() => {
           button.removeAttribute('aria-disabled');
           button.classList.remove('loading');
-          spinner?.classList.add('hidden');
         });
     }
   }
