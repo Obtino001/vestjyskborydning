@@ -3684,3 +3684,8 @@ details-disclosure > details {
 .cart-info-list a:hover {
   color: rgb(var(--color-foreground));
 }
+
+.main-page-title,
+.page-title {
+  text-align: center;
+}
