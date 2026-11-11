@@ -2,78 +2,141 @@
   Cart drawer recommendations - Dore & Rose style carousel.
   Fetched by assets/cart-drawer-recommendations.js through Shopify's Product Recommendations API:
   /recommendations/products?section_id=cart-drawer-recommendations&product_id=…&limit=8
+  Falls back to collections['all'].products when Shopify's recommendation index is empty.
   Only shows in-stock products that are not already in the cart.
 {%- endcomment -%}
-{%- assign shown = 0 -%}
+{%- liquid
+  assign shown = 0
+  assign seen_ids = ','
+  for item in cart.items
+    assign seen_ids = seen_ids | append: item.product_id | append: ','
+  endfor
+-%}
 <div class="cart-recs__inner">
-  {%- if recommendations.performed? and recommendations.products_count > 0 -%}
-    <div class="cart-recs__carousel" data-recs-carousel>
-      <ul class="cart-recs__list" role="list">
-        {%- for rec in recommendations.products -%}
-          {%- liquid
-            if shown >= 6
-              break
-            endif
-
-            unless rec.available
-              continue
-            endunless
-
-            assign in_cart = false
-            for item in cart.items
-              if item.product_id == rec.id
-                assign in_cart = true
-                break
-              endif
-            endfor
-            if in_cart
-              continue
-            endif
-
-            assign variant = rec.selected_or_first_available_variant
-            unless variant.available
-              continue
-            endunless
-
-            assign shown = shown | plus: 1
-          -%}
-          <li class="cart-recs__item">
-            <div class="cart-recs__card">
-              <a href="{{ rec.url }}" class="cart-recs__media" aria-label="{{ rec.title | escape }}">
-                {%- if rec.featured_media -%}
-                  {%- assign rec_alt = rec.featured_media.alt | default: rec.title | escape -%}
-                  {{
-                    rec.featured_media
-                    | image_url: width: 300
-                    | image_tag: loading: 'lazy', widths: '150, 300', sizes: '140px', alt: rec_alt
-                  }}
-                {%- else -%}
-                  {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
-                {%- endif -%}
+  {%- capture recs_items_html -%}
+    {%- if recommendations.performed? and recommendations.products_count > 0 -%}
+      {%- for rec in recommendations.products -%}
+        {%- liquid
+          if shown >= 6
+            break
+          endif
+          unless rec.available
+            continue
+          endunless
+          assign rec_id_token = ',' | append: rec.id | append: ','
+          if seen_ids contains rec_id_token
+            continue
+          endif
+          assign variant = rec.selected_or_first_available_variant
+          unless variant.available
+            continue
+          endunless
+          assign seen_ids = seen_ids | append: rec.id | append: ','
+          assign shown = shown | plus: 1
+        -%}
+        <li class="cart-recs__item">
+          <div class="cart-recs__card">
+            <a href="{{ rec.url }}" class="cart-recs__media" aria-label="{{ rec.title | escape }}">
+              {%- if rec.featured_media -%}
+                {%- assign rec_alt = rec.featured_media.alt | default: rec.title | escape -%}
+                {{
+                  rec.featured_media
+                  | image_url: width: 360
+                  | image_tag: loading: 'lazy', widths: '180, 360', sizes: '140px', alt: rec_alt
+                }}
+              {%- else -%}
+                {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+              {%- endif -%}
+            </a>
+            <div class="cart-recs__info">
+              <a href="{{ rec.url }}" class="cart-recs__product-title" title="{{ rec.title | escape }}">
+                {{ rec.title | escape }}
               </a>
-              <div class="cart-recs__info">
-                <a href="{{ rec.url }}" class="cart-recs__title" title="{{ rec.title | escape }}">
-                  {{ rec.title | escape }}
-                </a>
-                <div class="card-information cart-recs__price">
-                  {%- render 'price', product: rec, price_class: '' -%}
-                </div>
-              </div>
-              <div class="cart-recs__actions">
-                <button
-                  type="button"
-                  class="cart-recs__add-button"
-                  data-variant-id="{{ variant.id }}"
-                  aria-label="{{ 'products.product.add_to_cart' | t }}: {{ rec.title | escape }}"
-                >
-                  <span class="cart-recs__add-text">{{ 'products.product.add_to_cart' | t }}</span>
-                  <span class="cart-recs__spinner" aria-hidden="true"></span>
-                </button>
-                <p class="cart-recs__error" role="alert" hidden></p>
+              <div class="card-information cart-recs__price">
+                {%- render 'price', product: rec, price_class: '' -%}
               </div>
             </div>
-          </li>
-        {%- endfor -%}
+            <div class="cart-recs__actions">
+              <button
+                type="button"
+                class="cart-recs__add-button"
+                data-variant-id="{{ variant.id }}"
+                aria-label="{{ 'products.product.add_to_cart' | t }}: {{ rec.title | escape }}"
+              >
+                <span class="cart-recs__add-text">{{ 'products.product.add_to_cart' | t }}</span>
+                <span class="cart-recs__spinner" aria-hidden="true"></span>
+              </button>
+              <p class="cart-recs__error" role="alert" hidden></p>
+            </div>
+          </div>
+        </li>
+      {%- endfor -%}
+    {%- endif -%}
+
+    {%- if shown < 6 and collections['all'].products.size > 0 -%}
+      {%- for rec in collections['all'].products -%}
+        {%- liquid
+          if shown >= 6
+            break
+          endif
+          unless rec.available
+            continue
+          endunless
+          assign rec_id_token = ',' | append: rec.id | append: ','
+          if seen_ids contains rec_id_token
+            continue
+          endif
+          assign variant = rec.selected_or_first_available_variant
+          unless variant.available
+            continue
+          endunless
+          assign seen_ids = seen_ids | append: rec.id | append: ','
+          assign shown = shown | plus: 1
+        -%}
+        <li class="cart-recs__item">
+          <div class="cart-recs__card">
+            <a href="{{ rec.url }}" class="cart-recs__media" aria-label="{{ rec.title | escape }}">
+              {%- if rec.featured_media -%}
+                {%- assign rec_alt = rec.featured_media.alt | default: rec.title | escape -%}
+                {{
+                  rec.featured_media
+                  | image_url: width: 360
+                  | image_tag: loading: 'lazy', widths: '180, 360', sizes: '140px', alt: rec_alt
+                }}
+              {%- else -%}
+                {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+              {%- endif -%}
+            </a>
+            <div class="cart-recs__info">
+              <a href="{{ rec.url }}" class="cart-recs__product-title" title="{{ rec.title | escape }}">
+                {{ rec.title | escape }}
+              </a>
+              <div class="card-information cart-recs__price">
+                {%- render 'price', product: rec, price_class: '' -%}
+              </div>
+            </div>
+            <div class="cart-recs__actions">
+              <button
+                type="button"
+                class="cart-recs__add-button"
+                data-variant-id="{{ variant.id }}"
+                aria-label="{{ 'products.product.add_to_cart' | t }}: {{ rec.title | escape }}"
+              >
+                <span class="cart-recs__add-text">{{ 'products.product.add_to_cart' | t }}</span>
+                <span class="cart-recs__spinner" aria-hidden="true"></span>
+              </button>
+              <p class="cart-recs__error" role="alert" hidden></p>
+            </div>
+          </div>
+        </li>
+      {%- endfor -%}
+    {%- endif -%}
+  {%- endcapture -%}
+
+  {%- if shown > 0 -%}
+    <div class="cart-recs__carousel" data-recs-carousel>
+      <ul class="cart-recs__list" role="list">
+        {{ recs_items_html }}
       </ul>
     </div>
   {%- endif -%}

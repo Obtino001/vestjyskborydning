@@ -375,21 +375,155 @@
 
               {%- comment -%}
                 Recommendations based on the last item added (cart.items is newest first).
-                Filled by assets/cart-drawer-recommendations.js; stays hidden if the API returns nothing.
+                Pre-renders fallback products from the item's collection / collections['all']
+                and upgrades via assets/cart-drawer-recommendations.js when the API returns related items.
               {%- endcomment -%}
-              {%- assign recs_product_id = cart.items.first.product_id -%}
-              {%- assign recs_cart_key = cart.items | map: 'product_id' | join: '-' -%}
+              {%- liquid
+                assign recs_product = cart.items.first.product
+                assign recs_product_id = cart.items.first.product_id
+                assign recs_cart_key = cart.items | map: 'product_id' | join: '-'
+                assign fallback_shown = 0
+                assign fallback_seen_ids = ','
+                for item in cart.items
+                  assign fallback_seen_ids = fallback_seen_ids | append: item.product_id | append: ','
+                endfor
+              -%}
+              {%- capture fallback_recs_items -%}
+                {%- if recs_product.collections.size > 0 -%}
+                  {%- for rec in recs_product.collections.first.products limit: 12 -%}
+                    {%- liquid
+                      if fallback_shown >= 6
+                        break
+                      endif
+                      unless rec.available
+                        continue
+                      endunless
+                      assign rec_id_token = ',' | append: rec.id | append: ','
+                      if fallback_seen_ids contains rec_id_token
+                        continue
+                      endif
+                      assign variant = rec.selected_or_first_available_variant
+                      unless variant.available
+                        continue
+                      endunless
+                      assign fallback_seen_ids = fallback_seen_ids | append: rec.id | append: ','
+                      assign fallback_shown = fallback_shown | plus: 1
+                    -%}
+                    <li class="cart-recs__item">
+                      <div class="cart-recs__card">
+                        <a href="{{ rec.url }}" class="cart-recs__media" aria-label="{{ rec.title | escape }}">
+                          {%- if rec.featured_media -%}
+                            {%- assign rec_alt = rec.featured_media.alt | default: rec.title | escape -%}
+                            {{
+                              rec.featured_media
+                              | image_url: width: 360
+                              | image_tag: loading: 'lazy', widths: '180, 360', sizes: '140px', alt: rec_alt
+                            }}
+                          {%- else -%}
+                            {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                          {%- endif -%}
+                        </a>
+                        <div class="cart-recs__info">
+                          <a href="{{ rec.url }}" class="cart-recs__product-title" title="{{ rec.title | escape }}">
+                            {{ rec.title | escape }}
+                          </a>
+                          <div class="card-information cart-recs__price">
+                            {%- render 'price', product: rec, price_class: '' -%}
+                          </div>
+                        </div>
+                        <div class="cart-recs__actions">
+                          <button
+                            type="button"
+                            class="cart-recs__add-button"
+                            data-variant-id="{{ variant.id }}"
+                            aria-label="{{ 'products.product.add_to_cart' | t }}: {{ rec.title | escape }}"
+                          >
+                            <span class="cart-recs__add-text">{{ 'products.product.add_to_cart' | t }}</span>
+                            <span class="cart-recs__spinner" aria-hidden="true"></span>
+                          </button>
+                          <p class="cart-recs__error" role="alert" hidden></p>
+                        </div>
+                      </div>
+                    </li>
+                  {%- endfor -%}
+                {%- endif -%}
+                {%- if fallback_shown < 6 and collections['all'].products.size > 0 -%}
+                  {%- for rec in collections['all'].products limit: 16 -%}
+                    {%- liquid
+                      if fallback_shown >= 6
+                        break
+                      endif
+                      unless rec.available
+                        continue
+                      endunless
+                      assign rec_id_token = ',' | append: rec.id | append: ','
+                      if fallback_seen_ids contains rec_id_token
+                        continue
+                      endif
+                      assign variant = rec.selected_or_first_available_variant
+                      unless variant.available
+                        continue
+                      endunless
+                      assign fallback_seen_ids = fallback_seen_ids | append: rec.id | append: ','
+                      assign fallback_shown = fallback_shown | plus: 1
+                    -%}
+                    <li class="cart-recs__item">
+                      <div class="cart-recs__card">
+                        <a href="{{ rec.url }}" class="cart-recs__media" aria-label="{{ rec.title | escape }}">
+                          {%- if rec.featured_media -%}
+                            {%- assign rec_alt = rec.featured_media.alt | default: rec.title | escape -%}
+                            {{
+                              rec.featured_media
+                              | image_url: width: 360
+                              | image_tag: loading: 'lazy', widths: '180, 360', sizes: '140px', alt: rec_alt
+                            }}
+                          {%- else -%}
+                            {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                          {%- endif -%}
+                        </a>
+                        <div class="cart-recs__info">
+                          <a href="{{ rec.url }}" class="cart-recs__product-title" title="{{ rec.title | escape }}">
+                            {{ rec.title | escape }}
+                          </a>
+                          <div class="card-information cart-recs__price">
+                            {%- render 'price', product: rec, price_class: '' -%}
+                          </div>
+                        </div>
+                        <div class="cart-recs__actions">
+                          <button
+                            type="button"
+                            class="cart-recs__add-button"
+                            data-variant-id="{{ variant.id }}"
+                            aria-label="{{ 'products.product.add_to_cart' | t }}: {{ rec.title | escape }}"
+                          >
+                            <span class="cart-recs__add-text">{{ 'products.product.add_to_cart' | t }}</span>
+                            <span class="cart-recs__spinner" aria-hidden="true"></span>
+                          </button>
+                          <p class="cart-recs__error" role="alert" hidden></p>
+                        </div>
+                      </div>
+                    </li>
+                  {%- endfor -%}
+                {%- endif -%}
+              {%- endcapture -%}
               <cart-drawer-recommendations
                 class="cart-recs"
                 data-url="{{ routes.product_recommendations_url }}?section_id=cart-drawer-recommendations&product_id={{ recs_product_id }}&limit=8&intent=related"
                 data-cart-key="{{ recs_cart_key }}"
-                hidden
+                {% if fallback_shown == 0 %}hidden{% endif %}
               >
                 <div class="cart-recs__header">
-                  <h3 class="cart-recs__title">Andre numre fra boet</h3>
-                  <span class="cart-recs__tag">Anbefalet</span>
+                  <h3 class="cart-recs__heading">Andre numre fra boet</h3>
                 </div>
-                <div class="cart-recs__content"></div>
+                <div class="cart-recs__content">
+                  {%- if fallback_shown > 0 -%}
+                    <div class="cart-recs__carousel" data-recs-carousel>
+                      <ul class="cart-recs__list" role="list">
+                        {{ fallback_recs_items }}
+                      </ul>
+                    </div>
+                  {%- endif -%}
+                </div>
               </cart-drawer-recommendations>
             {%- endif -%}
             <p id="CartDrawer-LiveRegionText" class="visually-hidden" role="status"></p>

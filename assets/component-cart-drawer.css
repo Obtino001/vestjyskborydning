@@ -422,7 +422,7 @@ cart-drawer-items::-webkit-scrollbar-track-piece {
 /* Cart drawer recommendations - Dore & Rose style carousel */
 cart-drawer-recommendations {
   display: block;
-  margin: 1.5rem 0 2rem;
+  margin: 1.8rem 0 2rem;
   padding-top: 1.8rem;
   border-top: 0.1rem solid rgba(var(--color-foreground), 0.1);
 }
@@ -439,25 +439,13 @@ cart-drawer-recommendations[hidden] {
   margin-bottom: 1.4rem;
 }
 
-.cart-recs__title {
+.cart-recs__heading,
+.cart-recs__header .cart-recs__title {
   margin: 0;
   font-family: var(--font-heading-family);
-  font-size: calc(var(--font-heading-scale) * 1.5rem);
-  font-weight: 500;
+  font-size: calc(var(--font-heading-scale) * 1.55rem);
+  font-weight: 600;
   line-height: 1.25;
-  color: rgb(var(--color-foreground));
-}
-
-.cart-recs__tag {
-  display: inline-flex;
-  align-items: center;
-  font-size: 1.1rem;
-  font-weight: 500;
-  letter-spacing: 0.04rem;
-  padding: 0.3rem 0.8rem;
-  border-radius: 0.4rem;
-  white-space: nowrap;
-  background-color: rgba(var(--color-foreground), 0.06);
   color: rgb(var(--color-foreground));
 }
 
@@ -469,9 +457,8 @@ cart-drawer-recommendations[hidden] {
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   padding-bottom: 0.4rem;
-  margin: 0 -0.5rem;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
+  margin: 0 -1.5rem 0 0;
+  padding-right: 1.5rem;
 }
 
 .cart-recs__carousel::-webkit-scrollbar {
@@ -480,23 +467,23 @@ cart-drawer-recommendations[hidden] {
 
 .cart-recs__list {
   display: flex;
-  gap: 1.2rem;
+  gap: 1.1rem;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
 .cart-recs__item {
-  flex: 0 0 calc((100% - 2.4rem) / 3);
-  min-width: 110px;
-  max-width: 135px;
+  flex: 0 0 calc((100% - 2.2rem) / 3.18);
+  min-width: 112px;
+  max-width: 138px;
   scroll-snap-align: start;
 }
 
 @media screen and (max-width: 749px) {
   .cart-recs__item {
-    flex: 0 0 120px;
-    min-width: 120px;
+    flex: 0 0 calc((100% - 2rem) / 2.85);
+    min-width: 108px;
   }
 }
 
@@ -512,17 +499,17 @@ cart-drawer-recommendations[hidden] {
   position: relative;
   display: block;
   width: 100%;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 3 / 4;
   border-radius: 0.8rem;
   overflow: hidden;
-  background-color: #f7f7f7;
+  background-color: #f4f4f4;
 }
 
 .cart-recs__media img {
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
   transition: transform 0.25s ease;
 }
 
@@ -533,17 +520,18 @@ cart-drawer-recommendations[hidden] {
 .cart-recs__info {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
-  padding-top: 0.8rem;
+  gap: 0.35rem;
+  padding-top: 0.9rem;
   flex-grow: 1;
 }
 
-.cart-recs__title {
+.cart-recs__product-title,
+.cart-recs__info .cart-recs__title {
   margin: 0;
-  font-family: var(--font-heading-family);
-  font-size: calc(var(--font-heading-scale) * 1.25rem);
-  font-weight: 500;
-  line-height: 1.25;
+  font-family: var(--font-body-family);
+  font-size: 1.3rem;
+  font-weight: 400;
+  line-height: 1.3;
   color: rgb(var(--color-foreground));
   text-decoration: none;
   display: -webkit-box;
@@ -553,23 +541,39 @@ cart-drawer-recommendations[hidden] {
   word-break: break-word;
 }
 
-.cart-recs__title:hover {
+.cart-recs__product-title:hover,
+.cart-recs__info .cart-recs__title:hover {
   text-decoration: underline;
   text-underline-offset: 0.2rem;
 }
 
 .cart-recs__price {
-  margin-top: 0.2rem;
+  margin-top: 0.1rem;
 }
 
 .cart-drawer .cart-recs__price .price {
+  font-size: 1.05rem !important;
   line-height: 1.35;
-  letter-spacing: 0.02rem;
+  letter-spacing: 0.01rem;
+}
+
+.cart-drawer .cart-recs__price .price-line--vurdering,
+.cart-drawer .cart-recs__price .price-line--vurdering .price-item {
+  font-size: 1.05rem !important;
+  font-weight: 400 !important;
+  color: #6b6b6b !important;
+}
+
+.cart-drawer .cart-recs__price .price-line--boets,
+.cart-drawer .cart-recs__price .price-line--boets .price-item {
+  font-size: 1.05rem !important;
+  font-weight: 700 !important;
+  color: rgb(var(--color-foreground)) !important;
 }
 
 .cart-recs__actions {
   margin-top: auto;
-  padding-top: 0.8rem;
+  padding-top: 0.9rem;
 }
 
 .cart-recs__add-button {
@@ -577,16 +581,16 @@ cart-drawer-recommendations[hidden] {
   align-items: center;
   justify-content: center;
   width: 100%;
-  min-height: 3.4rem;
+  min-height: 3.6rem;
   padding: 0 0.8rem;
   border: 1px solid rgb(var(--color-foreground));
-  border-radius: var(--buttons-radius, 4rem);
+  border-radius: 0;
   background-color: transparent;
   color: rgb(var(--color-foreground));
   font-family: var(--font-body-family);
   font-size: 1.2rem;
-  font-weight: 600;
-  letter-spacing: 0.04rem;
+  font-weight: 500;
+  letter-spacing: 0.02rem;
   line-height: 1.2;
   text-align: center;
   cursor: pointer;

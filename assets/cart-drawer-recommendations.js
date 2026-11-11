@@ -12,6 +12,10 @@ if (!customElements.get('cart-drawer-recommendations')) {
     connectedCallback() {
       this.addEventListener('click', this.onClick);
 
+      if (this.querySelector('.cart-recs__item')) {
+        this.hidden = false;
+      }
+
       const url = this.dataset.url;
       if (!url) return;
       const cacheKey = `${url}|${this.dataset.cartKey || ''}`;
@@ -25,11 +29,15 @@ if (!customElements.get('cart-drawer-recommendations')) {
         .then((response) => (response.ok ? response.text() : ''))
         .then((text) => {
           const html = this.extractInner(text);
-          cartRecsCache.set(cacheKey, html);
+          if (html) {
+            cartRecsCache.set(cacheKey, html);
+          }
           if (this.isConnected) this.render(html);
         })
         .catch(() => {
-          this.hidden = true;
+          if (!this.querySelector('.cart-recs__item')) {
+            this.hidden = true;
+          }
         });
     }
 
@@ -46,8 +54,12 @@ if (!customElements.get('cart-drawer-recommendations')) {
 
     render(html) {
       const target = this.querySelector('.cart-recs__content');
-      if (!html || !target) {
+      if (!target) {
         this.hidden = true;
+        return;
+      }
+      if (!html) {
+        this.hidden = !target.querySelector('.cart-recs__item');
         return;
       }
       target.innerHTML = html;
