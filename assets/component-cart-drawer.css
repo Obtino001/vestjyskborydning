@@ -7,7 +7,7 @@
   height: 100%;
   display: flex;
   justify-content: flex-end;
-  background-color: rgba(var(--color-foreground), 0.5);
+  background-color: transparent;
   transition: visibility var(--duration-default) ease;
 }
 
@@ -22,6 +22,7 @@
   padding: 0 1.5rem;
   border: 0.1rem solid rgba(var(--color-foreground), 0.2);
   border-right: 0;
+  box-shadow: -0.5rem 0 3rem rgba(0, 0, 0, 0.15);
   overflow: hidden;
   display: flex;
   flex-direction: column;
