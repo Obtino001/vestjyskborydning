@@ -11,6 +11,7 @@ if (!customElements.get('cart-drawer-recommendations')) {
   class CartDrawerRecommendations extends HTMLElement {
     connectedCallback() {
       this.addEventListener('click', this.onClick);
+      this.addEventListener('mousedown', this.onMouseDown);
 
       if (this.querySelector('.cart-recs__item')) {
         this.hidden = false;
@@ -43,7 +44,45 @@ if (!customElements.get('cart-drawer-recommendations')) {
 
     disconnectedCallback() {
       this.removeEventListener('click', this.onClick);
+      this.removeEventListener('mousedown', this.onMouseDown);
     }
+
+    onMouseDown = (event) => {
+      const carousel = event.target.closest('.cart-recs__carousel');
+      if (!carousel || event.button !== 0 || event.target.closest('button')) return;
+      const startX = event.pageX;
+      const startScrollLeft = carousel.scrollLeft;
+      let dragged = false;
+
+      const onMouseMove = (moveEvent) => {
+        const dx = moveEvent.pageX - startX;
+        if (Math.abs(dx) > 5) {
+          dragged = true;
+          carousel.classList.add('is-dragging');
+        }
+        if (dragged) {
+          carousel.scrollLeft = startScrollLeft - dx;
+        }
+      };
+
+      const onMouseUp = () => {
+        window.removeEventListener('mousemove', onMouseMove);
+        window.removeEventListener('mouseup', onMouseUp);
+        carousel.classList.remove('is-dragging');
+        if (dragged) {
+          const suppressClick = (clickEvent) => {
+            clickEvent.preventDefault();
+            clickEvent.stopPropagation();
+            carousel.removeEventListener('click', suppressClick, true);
+          };
+          carousel.addEventListener('click', suppressClick, true);
+          setTimeout(() => carousel.removeEventListener('click', suppressClick, true), 50);
+        }
+      };
+
+      window.addEventListener('mousemove', onMouseMove);
+      window.addEventListener('mouseup', onMouseUp);
+    };
 
     extractInner(text) {
       if (!text) return '';
