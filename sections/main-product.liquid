@@ -110,9 +110,9 @@
                   {%- liquid
                     assign is_ring_collection = false
                     for col in product.collections
-                      assign col_handle_down = col.handle | downcase
-                      assign col_title_down = col.title | downcase
-                      if col_handle_down == 'ringe' or col_handle_down == 'ring' or col_handle_down contains 'ring' or col_title_down contains 'ring'
+                      assign col_handle_down = col.handle | downcase | strip
+                      assign col_title_down = col.title | downcase | strip
+                      if col_handle_down == 'ringe' or col_handle_down == 'ring' or col_title_down == 'ringe' or col_title_down == 'ring'
                         assign is_ring_collection = true
                         break
                       endif
@@ -803,9 +803,9 @@
       {%- liquid
         assign is_ring_collection_modal = false
         for col in product.collections
-          assign col_handle_down = col.handle | downcase
-          assign col_title_down = col.title | downcase
-          if col_handle_down == 'ringe' or col_handle_down == 'ring' or col_handle_down contains 'ring' or col_title_down contains 'ring'
+          assign col_handle_down = col.handle | downcase | strip
+          assign col_title_down = col.title | downcase | strip
+          if col_handle_down == 'ringe' or col_handle_down == 'ring' or col_title_down == 'ringe' or col_title_down == 'ring'
             assign is_ring_collection_modal = true
             break
           endif

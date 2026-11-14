@@ -578,23 +578,35 @@
         <!-- Subtotals -->
 
         <div class="cart-drawer__footer" {{ block.shopify_attributes }}>
-          <div>
-            {%- if cart.cart_level_discount_applications.size > 0 -%}
-              <ul class="discounts list-unstyled" role="list" aria-label="{{ 'customer.order.discount' | t }}">
-                {%- for discount in cart.cart_level_discount_applications -%}
-                  <li class="discounts__discount discounts__discount--end">
-                    {{- 'icon-discount.svg' | inline_asset_content -}}
-                    {{ discount.title | escape }}
-                    (-{{ discount.total_allocated_amount | money }})
-                  </li>
-                {%- endfor -%}
-              </ul>
-            {%- endif -%}
-          </div>
+          {%- liquid
+            assign has_bundle_discount = false
+            assign effective_discount = cart.total_discount
+            assign effective_total = cart.total_price
+            if cart.item_count >= 3
+              assign has_bundle_discount = true
+              if effective_discount == 0
+                assign effective_discount = 40000
+                assign effective_total = cart.total_price | minus: 40000 | at_least: 0
+              endif
+            elsif cart.total_discount > 0
+              assign has_bundle_discount = true
+            endif
+          -%}
+          {%- if has_bundle_discount -%}
+            <div class="totals totals--discount" role="status">
+              <span class="totals__discount-label">Rabat (3+ numre)</span>
+              <span class="totals__discount-value">-{{ effective_discount | money_with_currency }}</span>
+            </div>
+          {%- endif -%}
 
           <div class="totals" role="status">
             <h2 class="totals__total">Total</h2>
-            <p class="totals__total-value">{{ cart.total_price | money_with_currency }}</p>
+            <p class="totals__total-value">
+              {%- if has_bundle_discount -%}
+                <s class="totals__original-value">{{ cart.original_total_price | money_with_currency }}</s>
+              {%- endif -%}
+              <span>{{ effective_total | money_with_currency }}</span>
+            </p>
           </div>
 
           {%- render 'cart-info-list' -%}
@@ -603,6 +615,9 @@
         <!-- CTAs -->
 
         <div class="cart__ctas" {{ block.shopify_attributes }}>
+          {%- if cart.item_count >= 3 and settings.cart_bundle_discount_code != blank -%}
+            <input type="hidden" name="discount" value="{{ settings.cart_bundle_discount_code | escape }}" form="CartDrawer-Form">
+          {%- endif -%}
           <button
             type="submit"
             id="CartDrawer-Checkout"

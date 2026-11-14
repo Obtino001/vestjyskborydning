@@ -724,3 +724,30 @@ cart-drawer-recommendations[hidden] {
 .cart-drawer .cart-item__error {
   margin-top: 0;
 }
+
+.cart-drawer .totals--discount,
+.cart__blocks .totals--discount {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.35rem;
+  font-size: 1.25rem;
+  line-height: 1.3;
+  color: #6b6b6b;
+}
+
+.cart-drawer .totals__discount-value,
+.cart__blocks .totals__discount-value {
+  font-weight: 500;
+  color: rgb(var(--color-foreground));
+}
+
+.cart-drawer .totals__original-value,
+.cart__blocks .totals__original-value {
+  text-decoration: line-through;
+  color: #6b6b6b;
+  font-weight: 400;
+  font-size: 1.25rem;
+  margin-right: 0.6rem;
+}
+

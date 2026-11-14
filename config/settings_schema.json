@@ -1470,6 +1470,12 @@
       },
       {
         "type": "text",
+        "id": "cart_bundle_discount_code",
+        "label": "Valgfri rabatkode ved 3+ varer (til kassen)",
+        "info": "Hvis du bruger en automatisk rabat i Shopify (anbefalet), kan dette felt stå tomt."
+      },
+      {
+        "type": "text",
         "id": "cart_recs_heading",
         "label": "Overskrift for anbefalinger i kurv",
         "default": "Andre numre fra boet"
