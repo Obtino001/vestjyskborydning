@@ -1550,6 +1550,11 @@ a.product__text {
   height: 1.6rem;
 }
 
+.product__size-guide-icon--custom {
+  object-fit: contain;
+  display: block;
+}
+
 .ring-size-guide-modal__content {
   width: min(92vw, 56rem);
   padding: 0 2.4rem 2.8rem;

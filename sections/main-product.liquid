@@ -117,6 +117,9 @@
                         break
                       endif
                     endfor
+                    assign sg_label = block.settings.ring_size_guide_label | default: section.settings.ring_size_guide_label | default: 'Størrelsesguide'
+                    assign sg_icon = block.settings.ring_size_guide_icon | default: section.settings.ring_size_guide_icon | default: 'ring_measure'
+                    assign sg_custom_icon = block.settings.ring_size_guide_custom_icon | default: section.settings.ring_size_guide_custom_icon
                   -%}
                   <div class="product__price-row" {{ block.shopify_attributes }}>
                     <div id="price-{{ section.id }}" role="status">
@@ -138,13 +141,53 @@
                           type="button"
                           aria-haspopup="dialog"
                         >
-                          <svg class="product__size-guide-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <circle cx="12" cy="12" r="8"></circle>
-                            <path d="M8 12h8"></path>
-                            <path d="M8 10v4"></path>
-                            <path d="M16 10v4"></path>
-                          </svg>
-                          <span>{{ section.settings.ring_size_guide_label | default: 'Størrelsesguide' | escape }}</span>
+                          {%- if sg_custom_icon != blank -%}
+                            {{
+                              sg_custom_icon
+                              | image_url: width: 48
+                              | image_tag:
+                                class: 'product__size-guide-icon product__size-guide-icon--custom',
+                                loading: 'lazy',
+                                widths: '24, 48',
+                                alt: ''
+                            }}
+                          {%- elsif sg_icon != 'none' -%}
+                            {%- case sg_icon -%}
+                              {%- when 'ruler' -%}
+                                <svg class="product__size-guide-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                  <path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0Z"></path>
+                                  <path d="m14.5 12.5 2-2"></path>
+                                  <path d="m11.5 9.5 2-2"></path>
+                                  <path d="m8.5 6.5 2-2"></path>
+                                  <path d="m17.5 15.5 2-2"></path>
+                                </svg>
+                              {%- when 'ring' -%}
+                                <svg class="product__size-guide-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                  <circle cx="12" cy="14" r="7"></circle>
+                                  <path d="M9 4h6l2 3-5 3-5-3 2-3Z"></path>
+                                </svg>
+                              {%- when 'info' -%}
+                                <svg class="product__size-guide-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                  <circle cx="12" cy="12" r="9"></circle>
+                                  <path d="M12 16v-4"></path>
+                                  <path d="M12 8h.01"></path>
+                                </svg>
+                              {%- when 'question_mark' -%}
+                                <svg class="product__size-guide-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                  <circle cx="12" cy="12" r="9"></circle>
+                                  <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                                  <path d="M12 17h.01"></path>
+                                </svg>
+                              {%- else -%}
+                                <svg class="product__size-guide-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                  <circle cx="12" cy="12" r="8"></circle>
+                                  <path d="M8 12h8"></path>
+                                  <path d="M8 10v4"></path>
+                                  <path d="M16 10v4"></path>
+                                </svg>
+                            {%- endcase -%}
+                          {%- endif -%}
+                          <span>{{ sg_label | escape }}</span>
                         </button>
                       </modal-opener>
                     {%- endif -%}
@@ -764,12 +807,16 @@
             break
           endif
         endfor
+        assign price_block = section.blocks | where: 'type', 'price' | first
+        assign modal_sg_label = price_block.settings.ring_size_guide_label | default: section.settings.ring_size_guide_label | default: 'Størrelsesguide'
+        assign modal_sg_image = price_block.settings.ring_size_guide_image | default: section.settings.ring_size_guide_image
+        assign modal_sg_page = price_block.settings.ring_size_guide_page | default: section.settings.ring_size_guide_page
       -%}
       {%- if is_ring_collection_modal -%}
         <modal-dialog id="PopupModal-RingSizeGuide-{{ section.id }}" class="product-popup-modal">
           <div
             role="dialog"
-            aria-label="{{ section.settings.ring_size_guide_label | default: 'Størrelsesguide' | escape }}"
+            aria-label="{{ modal_sg_label | escape }}"
             aria-modal="true"
             class="product-popup-modal__content ring-size-guide-modal__content"
             tabindex="-1"
@@ -784,27 +831,27 @@
             </button>
             <div class="product-popup-modal__content-info ring-size-guide-modal__info">
               <h2 class="h2 ring-size-guide-modal__heading">
-                {{ section.settings.ring_size_guide_label | default: 'Størrelsesguide' | escape }}
+                {{ modal_sg_label | escape }}
               </h2>
-              {%- if section.settings.ring_size_guide_image != blank -%}
+              {%- if modal_sg_image != blank -%}
                 <div class="ring-size-guide-modal__image-wrap">
                   {{
-                    section.settings.ring_size_guide_image
+                    modal_sg_image
                     | image_url: width: 1200
                     | image_tag:
                       class: 'ring-size-guide-modal__image',
                       loading: 'lazy',
                       widths: '400, 600, 800, 1200',
-                      alt: section.settings.ring_size_guide_label
+                      alt: modal_sg_label
                   }}
                 </div>
               {%- endif -%}
-              {%- if section.settings.ring_size_guide_page != blank -%}
+              {%- if modal_sg_page != blank -%}
                 <div class="rte">
-                  {{ section.settings.ring_size_guide_page.content }}
+                  {{ modal_sg_page.content }}
                 </div>
               {%- endif -%}
-              {%- if section.settings.ring_size_guide_image == blank and section.settings.ring_size_guide_page == blank -%}
+              {%- if modal_sg_image == blank and modal_sg_page == blank -%}
                 <div class="ring-size-guide-modal__default rte">
                   <p>Mål den indvendige diameter på en ring, der passer dig, eller omkredsen af din finger i millimeter.</p>
                   <table class="ring-size-guide__table">
@@ -907,7 +954,66 @@
     {
       "type": "price",
       "name": "t:sections.main-product.blocks.price.name",
-      "limit": 1
+      "limit": 1,
+      "settings": [
+        {
+          "type": "header",
+          "content": "Størrelsesguide (kun Ringe)"
+        },
+        {
+          "type": "text",
+          "id": "ring_size_guide_label",
+          "default": "Størrelsesguide",
+          "label": "Størrelsesguide tekst"
+        },
+        {
+          "type": "select",
+          "id": "ring_size_guide_icon",
+          "label": "Ikon",
+          "default": "ring_measure",
+          "options": [
+            {
+              "value": "ring_measure",
+              "label": "Ring med mål"
+            },
+            {
+              "value": "ruler",
+              "label": "Lineal / målebånd"
+            },
+            {
+              "value": "ring",
+              "label": "Ring"
+            },
+            {
+              "value": "info",
+              "label": "Info (i)"
+            },
+            {
+              "value": "question_mark",
+              "label": "Spørgsmålstegn (?)"
+            },
+            {
+              "value": "none",
+              "label": "Intet ikon"
+            }
+          ]
+        },
+        {
+          "type": "image_picker",
+          "id": "ring_size_guide_custom_icon",
+          "label": "Eget ikon billede (valgfrit - erstatter ikonet ovenfor)"
+        },
+        {
+          "type": "image_picker",
+          "id": "ring_size_guide_image",
+          "label": "Størrelsesguide billede (i popup)"
+        },
+        {
+          "type": "page",
+          "id": "ring_size_guide_page",
+          "label": "Størrelsesguide side (valgfri)"
+        }
+      ]
     },
     {
       "type": "sku",
@@ -2411,6 +2517,43 @@
       "id": "ring_size_guide_label",
       "default": "Størrelsesguide",
       "label": "Størrelsesguide tekst (kun Ringe)"
+    },
+    {
+      "type": "select",
+      "id": "ring_size_guide_icon",
+      "label": "Størrelsesguide ikon",
+      "default": "ring_measure",
+      "options": [
+        {
+          "value": "ring_measure",
+          "label": "Ring med mål"
+        },
+        {
+          "value": "ruler",
+          "label": "Lineal / målebånd"
+        },
+        {
+          "value": "ring",
+          "label": "Ring"
+        },
+        {
+          "value": "info",
+          "label": "Info (i)"
+        },
+        {
+          "value": "question_mark",
+          "label": "Spørgsmålstegn (?)"
+        },
+        {
+          "value": "none",
+          "label": "Intet ikon"
+        }
+      ]
+    },
+    {
+      "type": "image_picker",
+      "id": "ring_size_guide_custom_icon",
+      "label": "Eget ikon billede (valgfrit)"
     },
     {
       "type": "image_picker",
