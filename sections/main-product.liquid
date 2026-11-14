@@ -120,6 +120,7 @@
                     assign sg_label = block.settings.ring_size_guide_label | default: section.settings.ring_size_guide_label | default: 'Størrelsesguide'
                     assign sg_icon = block.settings.ring_size_guide_icon | default: section.settings.ring_size_guide_icon | default: 'ring_measure'
                     assign sg_custom_icon = block.settings.ring_size_guide_custom_icon | default: section.settings.ring_size_guide_custom_icon
+                    assign bundle_note = block.settings.bundle_note_text | default: section.settings.bundle_note_text | default: 'Ved 3 numre i samme ordre fratrækkes i alt 400 kr. Gælder, til boet lukker.'
                   -%}
                   <div class="product__price-row" {{ block.shopify_attributes }}>
                     <div id="price-{{ section.id }}" role="status">
@@ -192,9 +193,11 @@
                       </modal-opener>
                     {%- endif -%}
                   </div>
-                  <p class="product__bundle-note">
-                    Ved 3 numre i samme ordre fratrækkes i alt 400 kr. Gælder, til boet lukker.
-                  </p>
+                  {%- if bundle_note != blank -%}
+                    <p class="product__bundle-note">
+                      {{ bundle_note | escape }}
+                    </p>
+                  {%- endif -%}
                   {%- if product.quantity_price_breaks_configured? -%}
                     <div class="volume-pricing-note" id="Volume-Note-{{ section.id }}">
                       <span>{{ 'products.product.volume_pricing.note' | t }}</span>
@@ -956,6 +959,12 @@
       "name": "t:sections.main-product.blocks.price.name",
       "limit": 1,
       "settings": [
+        {
+          "type": "text",
+          "id": "bundle_note_text",
+          "default": "Ved 3 numre i samme ordre fratrækkes i alt 400 kr. Gælder, til boet lukker.",
+          "label": "Rabattekst under pris"
+        },
         {
           "type": "header",
           "content": "Størrelsesguide (kun Ringe)"
@@ -2510,7 +2519,13 @@
     },
     {
       "type": "header",
-      "content": "Størrelsesguide (Ring)"
+      "content": "Størrelsesguide & Rabattekst"
+    },
+    {
+      "type": "text",
+      "id": "bundle_note_text",
+      "default": "Ved 3 numre i samme ordre fratrækkes i alt 400 kr. Gælder, til boet lukker.",
+      "label": "Rabattekst under pris"
     },
     {
       "type": "text",

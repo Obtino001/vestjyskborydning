@@ -1449,6 +1449,24 @@
         "id": "cart_color_scheme",
         "label": "t:sections.all.colors.label",
         "default": "scheme-1"
+      },
+      {
+        "type": "text",
+        "id": "cart_bundle_note_1",
+        "label": "Rabattekst ved 1 vare i kurven",
+        "default": "Ved 3 numre fratrækkes i alt 400 kr."
+      },
+      {
+        "type": "text",
+        "id": "cart_bundle_note_2",
+        "label": "Rabattekst ved 2 varer i kurven",
+        "default": "Ét nummer mere, og der fratrækkes i alt 400 kr."
+      },
+      {
+        "type": "text",
+        "id": "cart_recs_heading",
+        "label": "Overskrift for anbefalinger i kurv",
+        "default": "Andre numre fra boet"
       }
     ]
   }

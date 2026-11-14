@@ -511,10 +511,15 @@
                   {%- endfor -%}
                 {%- endif -%}
               {%- endcapture -%}
-              {%- if cart.item_count == 1 -%}
-                <p class="cart-drawer__bundle-note">Ved 3 numre fratrækkes i alt 400 kr.</p>
-              {%- elsif cart.item_count == 2 -%}
-                <p class="cart-drawer__bundle-note">Ét nummer mere, og der fratrækkes i alt 400 kr.</p>
+              {%- liquid
+                assign cart_note_1 = settings.cart_bundle_note_1 | default: 'Ved 3 numre fratrækkes i alt 400 kr.'
+                assign cart_note_2 = settings.cart_bundle_note_2 | default: 'Ét nummer mere, og der fratrækkes i alt 400 kr.'
+                assign cart_recs_title = settings.cart_recs_heading | default: 'Andre numre fra boet'
+              -%}
+              {%- if cart.item_count == 1 and cart_note_1 != blank -%}
+                <p class="cart-drawer__bundle-note">{{ cart_note_1 | escape }}</p>
+              {%- elsif cart.item_count == 2 and cart_note_2 != blank -%}
+                <p class="cart-drawer__bundle-note">{{ cart_note_2 | escape }}</p>
               {%- endif -%}
 
               <cart-drawer-recommendations
@@ -524,7 +529,7 @@
                 {% if fallback_shown == 0 %}hidden{% endif %}
               >
                 <div class="cart-recs__header">
-                  <h3 class="cart-recs__heading">Andre numre fra boet</h3>
+                  <h3 class="cart-recs__heading">{{ cart_recs_title | escape }}</h3>
                 </div>
                 <div class="cart-recs__content">
                   {%- if fallback_shown > 0 -%}
