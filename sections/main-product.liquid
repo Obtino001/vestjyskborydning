@@ -107,14 +107,51 @@
                     </a>
                   </div>
                 {%- when 'price' -%}
-                  <div id="price-{{ section.id }}" role="status" {{ block.shopify_attributes }}>
-                    {%- render 'price',
-                      product: product,
-                      use_variant: true,
-                      show_badges: true,
-                      price_class: 'price--large'
-                    -%}
+                  {%- liquid
+                    assign is_ring_collection = false
+                    for col in product.collections
+                      assign col_handle_down = col.handle | downcase
+                      assign col_title_down = col.title | downcase
+                      if col_handle_down == 'ringe' or col_handle_down == 'ring' or col_handle_down contains 'ring' or col_title_down contains 'ring'
+                        assign is_ring_collection = true
+                        break
+                      endif
+                    endfor
+                  -%}
+                  <div class="product__price-row" {{ block.shopify_attributes }}>
+                    <div id="price-{{ section.id }}" role="status">
+                      {%- render 'price',
+                        product: product,
+                        use_variant: true,
+                        show_badges: true,
+                        price_class: 'price--large'
+                      -%}
+                    </div>
+                    {%- if is_ring_collection -%}
+                      <modal-opener
+                        class="product-popup-modal__opener quick-add-hidden product__size-guide-opener"
+                        data-modal="#PopupModal-RingSizeGuide-{{ section.id }}"
+                      >
+                        <button
+                          id="ProductPopup-RingSizeGuide-{{ section.id }}"
+                          class="product-popup-modal__button link product__size-guide-button"
+                          type="button"
+                          aria-haspopup="dialog"
+                        >
+                          <svg class="product__size-guide-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <circle cx="12" cy="12" r="8"></circle>
+                            <path d="M8 12h8"></path>
+                            <path d="M8 10v4"></path>
+                            <path d="M16 10v4"></path>
+                          </svg>
+                          <span>{{ section.settings.ring_size_guide_label | default: 'Størrelsesguide' | escape }}</span>
+                        </button>
+                      </modal-opener>
+                    {%- endif -%}
                   </div>
+                  <p class="product__bundle-note">
+                    Ved 3 numre i samme ordre fratrækkes i alt 400 kr. Gælder, til boet lukker.
+                  </p>
                   {%- if product.quantity_price_breaks_configured? -%}
                     <div class="volume-pricing-note" id="Volume-Note-{{ section.id }}">
                       <span>{{ 'products.product.volume_pricing.note' | t }}</span>
@@ -716,6 +753,83 @@
           </div>
         </modal-dialog>
       {%- endfor -%}
+
+      {%- liquid
+        assign is_ring_collection_modal = false
+        for col in product.collections
+          assign col_handle_down = col.handle | downcase
+          assign col_title_down = col.title | downcase
+          if col_handle_down == 'ringe' or col_handle_down == 'ring' or col_handle_down contains 'ring' or col_title_down contains 'ring'
+            assign is_ring_collection_modal = true
+            break
+          endif
+        endfor
+      -%}
+      {%- if is_ring_collection_modal -%}
+        <modal-dialog id="PopupModal-RingSizeGuide-{{ section.id }}" class="product-popup-modal">
+          <div
+            role="dialog"
+            aria-label="{{ section.settings.ring_size_guide_label | default: 'Størrelsesguide' | escape }}"
+            aria-modal="true"
+            class="product-popup-modal__content ring-size-guide-modal__content"
+            tabindex="-1"
+          >
+            <button
+              id="ModalClose-RingSizeGuide-{{ section.id }}"
+              type="button"
+              class="product-popup-modal__toggle"
+              aria-label="{{ 'accessibility.close' | t }}"
+            >
+              {{- 'icon-close.svg' | inline_asset_content -}}
+            </button>
+            <div class="product-popup-modal__content-info ring-size-guide-modal__info">
+              <h2 class="h2 ring-size-guide-modal__heading">
+                {{ section.settings.ring_size_guide_label | default: 'Størrelsesguide' | escape }}
+              </h2>
+              {%- if section.settings.ring_size_guide_image != blank -%}
+                <div class="ring-size-guide-modal__image-wrap">
+                  {{
+                    section.settings.ring_size_guide_image
+                    | image_url: width: 1200
+                    | image_tag:
+                      class: 'ring-size-guide-modal__image',
+                      loading: 'lazy',
+                      widths: '400, 600, 800, 1200',
+                      alt: section.settings.ring_size_guide_label
+                  }}
+                </div>
+              {%- endif -%}
+              {%- if section.settings.ring_size_guide_page != blank -%}
+                <div class="rte">
+                  {{ section.settings.ring_size_guide_page.content }}
+                </div>
+              {%- endif -%}
+              {%- if section.settings.ring_size_guide_image == blank and section.settings.ring_size_guide_page == blank -%}
+                <div class="ring-size-guide-modal__default rte">
+                  <p>Mål den indvendige diameter på en ring, der passer dig, eller omkredsen af din finger i millimeter.</p>
+                  <table class="ring-size-guide__table">
+                    <thead>
+                      <tr>
+                        <th>Ringstørrelse (omkreds)</th>
+                        <th>Indvendig diameter</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr><td>49</td><td>15,6 mm</td></tr>
+                      <tr><td>52</td><td>16,5 mm</td></tr>
+                      <tr><td>54</td><td>17,2 mm</td></tr>
+                      <tr><td>57</td><td>18,1 mm</td></tr>
+                      <tr><td>60</td><td>19,1 mm</td></tr>
+                      <tr><td>63</td><td>20,0 mm</td></tr>
+                      <tr><td>65</td><td>20,7 mm</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              {%- endif -%}
+            </div>
+          </div>
+        </modal-dialog>
+      {%- endif -%}
 
       {%- if product.media.size > 0 -%}
         <script src="{{ 'product-modal.js' | asset_url }}" defer="defer"></script>
@@ -2287,6 +2401,26 @@
       "id": "enable_video_looping",
       "default": false,
       "label": "t:sections.main-product.settings.enable_video_looping.label"
+    },
+    {
+      "type": "header",
+      "content": "Størrelsesguide (Ring)"
+    },
+    {
+      "type": "text",
+      "id": "ring_size_guide_label",
+      "default": "Størrelsesguide",
+      "label": "Størrelsesguide tekst (kun Ringe)"
+    },
+    {
+      "type": "image_picker",
+      "id": "ring_size_guide_image",
+      "label": "Størrelsesguide billede (kun Ringe)"
+    },
+    {
+      "type": "page",
+      "id": "ring_size_guide_page",
+      "label": "Størrelsesguide side (valgfri)"
     },
     {
       "type": "header",

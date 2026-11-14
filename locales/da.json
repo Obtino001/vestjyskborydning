@@ -298,8 +298,8 @@
         "title": "Har du en konto?",
         "paragraph_html": "<a href=\"{{ link }}\" class=\"link underlined-link\">Log ind</a> for at betale hurtigere."
       },
-      "estimated_total": "Estimeret totalbeløb",
-      "new_estimated_total": "Ny estimeret totalbeløb",
+      "estimated_total": "Total",
+      "new_estimated_total": "Total",
       "duties_and_taxes_included_shipping_at_checkout_with_policy_html": "Inklusive told og skatter. Rabatter og <a href=\"{{ link }}\">levering</a> beregnes ved betaling.",
       "duties_and_taxes_included_shipping_at_checkout_without_policy": "Inklusive told og skatter. Rabatter og levering beregnes ved betaling.",
       "taxes_included_shipping_at_checkout_with_policy_html": "Inklusive skatter. Rabatter og <a href=\"{{ link }}\">levering</a> beregnes ved betaling.",
