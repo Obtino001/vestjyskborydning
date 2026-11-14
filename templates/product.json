@@ -27,7 +27,7 @@
           "type": "price",
           "settings": {
             "ring_size_guide_label": "Størrelsesguide",
-            "ring_size_guide_icon": "ring_measure",
+            "ring_size_guide_icon": "ruler",
             "ring_size_guide_image": "shopify://shop_images/hf_20261101_090743_76724fde-d63f-4a54-a008-639160a04e22.jpg",
             "ring_size_guide_page": ""
           }
