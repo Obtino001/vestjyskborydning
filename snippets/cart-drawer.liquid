@@ -514,12 +514,15 @@
               {%- liquid
                 assign cart_note_1 = settings.cart_bundle_note_1 | default: 'Ved 3 numre fratrækkes i alt 400 kr.'
                 assign cart_note_2 = settings.cart_bundle_note_2 | default: 'Ét nummer mere, og der fratrækkes i alt 400 kr.'
+                assign cart_note_3 = settings.cart_bundle_note_3 | default: 'Samlet afregning: Der er fratrukket 400 kr. fra din ordre.'
                 assign cart_recs_title = settings.cart_recs_heading | default: 'Andre numre fra boet'
               -%}
               {%- if cart.item_count == 1 and cart_note_1 != blank -%}
                 <p class="cart-drawer__bundle-note">{{ cart_note_1 | escape }}</p>
               {%- elsif cart.item_count == 2 and cart_note_2 != blank -%}
                 <p class="cart-drawer__bundle-note">{{ cart_note_2 | escape }}</p>
+              {%- elsif cart.item_count >= 3 and cart_note_3 != blank -%}
+                <p class="cart-drawer__bundle-note">{{ cart_note_3 | escape }}</p>
               {%- endif -%}
 
               <cart-drawer-recommendations

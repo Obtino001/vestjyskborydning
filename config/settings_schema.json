@@ -1464,6 +1464,12 @@
       },
       {
         "type": "text",
+        "id": "cart_bundle_note_3",
+        "label": "Rabattekst ved 3 eller flere varer i kurven",
+        "default": "Samlet afregning: Der er fratrukket 400 kr. fra din ordre."
+      },
+      {
+        "type": "text",
         "id": "cart_recs_heading",
         "label": "Overskrift for anbefalinger i kurv",
         "default": "Andre numre fra boet"
