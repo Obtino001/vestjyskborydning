@@ -369,9 +369,9 @@
               -%}
               {%- capture fallback_recs_items -%}
                 {%- if recs_product.collections.size > 0 -%}
-                  {%- for rec in recs_product.collections.first.products limit: 12 -%}
+                  {%- for rec in recs_product.collections.first.products limit: 20 -%}
                     {%- liquid
-                      if fallback_shown >= 6
+                      if fallback_shown >= 12
                         break
                       endif
                       unless rec.available
@@ -426,14 +426,14 @@
                     </li>
                   {%- endfor -%}
                 {%- endif -%}
-                {%- if fallback_shown < 6 -%}
+                {%- if fallback_shown < 12 -%}
                   {%- for col in collections -%}
-                    {%- if fallback_shown >= 6 -%}
+                    {%- if fallback_shown >= 12 -%}
                       {%- break -%}
                     {%- endif -%}
-                    {%- for rec in col.products limit: 16 -%}
+                    {%- for rec in col.products limit: 24 -%}
                       {%- liquid
-                        if fallback_shown >= 6
+                        if fallback_shown >= 12
                           break
                         endif
                         unless rec.available
@@ -506,7 +506,7 @@
 
               <cart-drawer-recommendations
                 class="cart-recs"
-                data-url="{{ routes.product_recommendations_url }}?section_id=cart-drawer-recommendations&product_id={{ recs_product_id }}&limit=8&intent=related"
+                data-url="{{ routes.product_recommendations_url }}?section_id=cart-drawer-recommendations&product_id={{ recs_product_id }}&limit=12&intent=related"
                 data-cart-key="{{ recs_cart_key }}"
                 {% if fallback_shown == 0 %}hidden{% endif %}
               >

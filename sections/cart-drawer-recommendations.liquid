@@ -17,7 +17,7 @@
     {%- if recommendations.performed? and recommendations.products_count > 0 -%}
       {%- for rec in recommendations.products -%}
         {%- liquid
-          if shown >= 6
+          if shown >= 12
             break
           endif
           unless rec.available
@@ -73,14 +73,14 @@
       {%- endfor -%}
     {%- endif -%}
 
-    {%- if shown < 6 -%}
+    {%- if shown < 12 -%}
       {%- for col in collections -%}
-        {%- if shown >= 6 -%}
+        {%- if shown >= 12 -%}
           {%- break -%}
         {%- endif -%}
-        {%- for rec in col.products limit: 16 -%}
+        {%- for rec in col.products limit: 24 -%}
           {%- liquid
-            if shown >= 6
+            if shown >= 12
               break
             endif
             unless rec.available
