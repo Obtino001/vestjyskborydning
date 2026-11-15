@@ -211,6 +211,7 @@ cart-drawer-items {
   position: relative;
   display: grid;
   grid-template-columns: 5.2rem 1fr auto;
+  grid-template-rows: auto auto;
   align-items: start;
   gap: 0.2rem 1rem;
   margin-bottom: 0;
@@ -222,7 +223,7 @@ cart-drawer-items {
 
 .cart-drawer .cart-item__media {
   grid-column: 1;
-  grid-row: 1;
+  grid-row: 1 / span 2;
 }
 
 .cart-drawer .cart-item__image {
@@ -260,7 +261,7 @@ cart-drawer-items {
 .cart-drawer .cart-item__details {
   width: auto;
   grid-column: 2;
-  grid-row: 1;
+  grid-row: 1 / span 2;
 }
 
 .cart-drawer .cart-item__details .cart-item__name {
@@ -297,9 +298,9 @@ cart-drawer-items {
 }
 
 .cart-drawer .cart-items .cart-item__quantity {
-  padding-top: 2.6rem;
+  padding-top: 0.4rem;
   grid-column: 3;
-  grid-row: 1;
+  grid-row: 2;
   justify-self: end;
 }
 
@@ -711,9 +712,21 @@ cart-drawer-recommendations[hidden] {
 }
 
 .cart-drawer .cart-item cart-remove-button .button {
-  min-width: 2.6rem;
-  min-height: 2.6rem;
+  min-width: 2.2rem;
+  min-height: 2.2rem;
   padding: 0;
+  opacity: 0.7;
+  transition: opacity 0.15s ease;
+}
+
+.cart-drawer .cart-item cart-remove-button .button:hover {
+  opacity: 1;
+}
+
+.cart-drawer .cart-item cart-remove-button .svg-wrapper,
+.cart-drawer .cart-item cart-remove-button svg {
+  width: 1.35rem;
+  height: 1.35rem;
 }
 
 .cart-drawer .cart-item__quantity-wrapper {
