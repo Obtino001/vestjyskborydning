@@ -544,12 +544,24 @@
       },
       "shipping_errors": {
         "empty_state": "Fri levering, indtil boet lukker 29. november."
+      },
+      "payment": {
+        "card_security_notice": "Din betaling håndteres sikkert og krypteret gennem NETS. Vi gemmer aldrig dine kortoplysninger. ",
+        "card_information_notice": "Din betaling håndteres sikkert og krypteret gennem NETS. Vi gemmer aldrig dine kortoplysninger. ",
+        "card_security_vault_notice": "Din betaling håndteres sikkert og krypteret gennem NETS. Vi gemmer aldrig dine kortoplysninger. "
       }
     }
   },
   "customer_accounts": {
     "order_details": {
       "marketing_checkbox_label": "Giv mig besked, når næste bo åbner"
+    },
+    "payment_methods": {
+      "card_fields": {
+        "tooltip": {
+          "card_security_notice": "Din betaling håndteres sikkert og krypteret gennem NETS. Vi gemmer aldrig dine kortoplysninger. "
+        }
+      }
     }
   }
 }
