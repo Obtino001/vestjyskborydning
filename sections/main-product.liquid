@@ -275,6 +275,9 @@
                       {{ product.description }}
                     </div>
                   {%- endif -%}
+                  <p class="product__contact-note quick-add-hidden">
+                    Spørgsmål? Ring <a href="tel:+4571322956">+ 45 71 32 29 56</a> eller skriv til <a href="mailto:kontakt@vestjyskborydning.dk">kontakt@vestjyskborydning.dk</a>
+                  </p>
                 {%- when 'sku' -%}
                   <p
                     class="product__sku{% if block.settings.text_style == 'uppercase' %} caption-with-letter-spacing{% elsif block.settings.text_style == 'subtitle' %} subtitle{% endif %}{% if product.selected_or_first_available_variant.sku.size == 0 %} visibility-hidden{% endif %}"

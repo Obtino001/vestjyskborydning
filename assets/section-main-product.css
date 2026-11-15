@@ -1600,3 +1600,16 @@ a.product__text {
   font-weight: 600;
   color: rgb(var(--color-foreground));
 }
+
+.product__contact-note {
+  margin: 1.2rem 0 0;
+  font-size: 1.3rem;
+  line-height: 1.5;
+  color: rgba(var(--color-foreground), 0.78);
+}
+
+.product__contact-note a {
+  color: rgb(var(--color-foreground));
+  text-decoration: underline;
+  text-underline-offset: 0.25rem;
+}
