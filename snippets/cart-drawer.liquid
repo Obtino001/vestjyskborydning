@@ -491,9 +491,9 @@
                 {%- endif -%}
               {%- endcapture -%}
               {%- liquid
-                assign cart_note_1 = settings.cart_bundle_note_1 | default: 'Ved 3 numre fratrækkes i alt 400 kr.'
-                assign cart_note_2 = settings.cart_bundle_note_2 | default: 'Ét nummer mere, og der fratrækkes i alt 400 kr.'
-                assign cart_note_3 = settings.cart_bundle_note_3 | default: 'Samlet afregning: Der er fratrukket 400 kr. fra din ordre.'
+                assign cart_note_1 = settings.cart_bundle_note_1 | default: 'Køber du 3 numre, trækkes yderligere 400 kr. fra boets pris.'
+                assign cart_note_2 = settings.cart_bundle_note_2 | default: 'Ét nummer mere, og yderligere 400 kr. trækkes fra boets pris.'
+                assign cart_note_3 = settings.cart_bundle_note_3 | default: 'Samlet afregning: yderligere 400 kr. er trukket fra boets pris.'
                 assign cart_recs_title = settings.cart_recs_heading | default: 'Andre numre fra boet'
               -%}
               {%- if cart.item_count == 1 and cart_note_1 != blank -%}

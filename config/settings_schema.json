@@ -1454,19 +1454,19 @@
         "type": "text",
         "id": "cart_bundle_note_1",
         "label": "Rabattekst ved 1 vare i kurven",
-        "default": "Ved 3 numre fratrækkes i alt 400 kr."
+        "default": "Køber du 3 numre, trækkes yderligere 400 kr. fra boets pris."
       },
       {
         "type": "text",
         "id": "cart_bundle_note_2",
         "label": "Rabattekst ved 2 varer i kurven",
-        "default": "Ét nummer mere, og der fratrækkes i alt 400 kr."
+        "default": "Ét nummer mere, og yderligere 400 kr. trækkes fra boets pris."
       },
       {
         "type": "text",
         "id": "cart_bundle_note_3",
         "label": "Rabattekst ved 3 eller flere varer i kurven",
-        "default": "Samlet afregning: Der er fratrukket 400 kr. fra din ordre."
+        "default": "Samlet afregning: yderligere 400 kr. er trukket fra boets pris."
       },
       {
         "type": "text",
