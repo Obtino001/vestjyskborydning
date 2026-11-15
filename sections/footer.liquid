@@ -87,18 +87,40 @@
                       {{ block.settings.subtext }}
                     </div>
                   {%- when 'link_list' -%}
-                    {%- if block.settings.menu != blank -%}
+                    {%- if block.settings.menu != blank or block.settings.phone != blank or block.settings.email != blank -%}
                       <ul class="footer-block__details-content list-unstyled">
-                        {%- for link in block.settings.menu.links -%}
+                        {%- if block.settings.menu != blank -%}
+                          {%- for link in block.settings.menu.links -%}
+                            <li>
+                              <a
+                                href="{{ link.url }}"
+                                class="link link--text list-menu__item list-menu__item--link{% if link.active %} list-menu__item--active{% endif %}"
+                              >
+                                {{ link.title | escape }}
+                              </a>
+                            </li>
+                          {%- endfor -%}
+                        {%- endif -%}
+                        {%- if block.settings.phone != blank -%}
                           <li>
                             <a
-                              href="{{ link.url }}"
-                              class="link link--text list-menu__item list-menu__item--link{% if link.active %} list-menu__item--active{% endif %}"
+                              href="tel:{{ block.settings.phone | remove: ' ' | escape }}"
+                              class="link link--text list-menu__item list-menu__item--link"
                             >
-                              {{ link.title | escape }}
+                              {{ block.settings.phone | escape }}
                             </a>
                           </li>
-                        {%- endfor -%}
+                        {%- endif -%}
+                        {%- if block.settings.email != blank -%}
+                          <li>
+                            <a
+                              href="mailto:{{ block.settings.email | escape }}"
+                              class="link link--text list-menu__item list-menu__item--link"
+                            >
+                              {{ block.settings.email | escape }}
+                            </a>
+                          </li>
+                        {%- endif -%}
                       </ul>
                     {%- endif -%}
                   {%- when 'brand_information' -%}
@@ -336,6 +358,16 @@
           "id": "menu",
           "default": "footer",
           "label": "t:sections.footer.blocks.link_list.settings.menu.label"
+        },
+        {
+          "type": "text",
+          "id": "phone",
+          "label": "Telefonnummer (valgfrit)"
+        },
+        {
+          "type": "text",
+          "id": "email",
+          "label": "E-mail (valgfrit)"
         }
       ]
     },
