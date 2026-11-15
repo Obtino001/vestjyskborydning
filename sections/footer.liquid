@@ -103,22 +103,16 @@
                         {%- endif -%}
                         {%- if block.settings.phone != blank -%}
                           <li>
-                            <a
-                              href="tel:{{ block.settings.phone | remove: ' ' | escape }}"
-                              class="link link--text list-menu__item list-menu__item--link"
-                            >
+                            <span class="link link--text list-menu__item">
                               {{ block.settings.phone | escape }}
-                            </a>
+                            </span>
                           </li>
                         {%- endif -%}
                         {%- if block.settings.email != blank -%}
                           <li>
-                            <a
-                              href="mailto:{{ block.settings.email | escape }}"
-                              class="link link--text list-menu__item list-menu__item--link"
-                            >
+                            <span class="link link--text list-menu__item">
                               {{ block.settings.email | escape }}
-                            </a>
+                            </span>
                           </li>
                         {%- endif -%}
                       </ul>
