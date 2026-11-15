@@ -1608,8 +1608,10 @@ a.product__text {
   color: rgba(var(--color-foreground), 0.78);
 }
 
-.product__contact-note a {
-  color: rgb(var(--color-foreground));
-  text-decoration: underline;
-  text-underline-offset: 0.25rem;
+.product__contact-note a,
+a[x-apple-data-detectors] {
+  color: inherit !important;
+  text-decoration: none !important;
+  pointer-events: none !important;
+  cursor: default !important;
 }
