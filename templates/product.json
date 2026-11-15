@@ -26,10 +26,8 @@
         "price": {
           "type": "price",
           "settings": {
-            "bundle_note_text": "Ved 3 numre i samme ordre fratrækkes i alt 400 kr. Gælder, til boet lukker.",
             "ring_size_guide_label": "Størrelsesguide",
             "ring_size_guide_icon": "ruler",
-            "ring_size_guide_image": "shopify://shop_images/hf_20261101_090743_76724fde-d63f-4a54-a008-639160a04e22.jpg",
             "ring_size_guide_page": ""
           }
         },

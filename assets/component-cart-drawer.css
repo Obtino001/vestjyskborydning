@@ -447,11 +447,11 @@ cart-drawer-items::-webkit-scrollbar-track-piece {
 
 /* Dynamic 1/2-item discount note between cart items and recommendations */
 .cart-drawer__bundle-note {
-  margin: 0.2rem 0 0.6rem;
-  font-size: 1.2rem;
+  margin: 0.3rem 0 0.7rem;
+  font-size: 1.4rem;
   line-height: 1.35;
-  font-weight: 400;
-  color: #6b6b6b;
+  font-weight: 500;
+  color: #4a4a4a;
 }
 
 /* Cart drawer recommendations - Dore & Rose style carousel */
