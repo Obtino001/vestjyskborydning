@@ -104,14 +104,20 @@
                         {%- if block.settings.phone != blank -%}
                           <li>
                             <span class="link link--text list-menu__item">
-                              {{ block.settings.phone | escape }}
+                              {%- assign phone_parts = block.settings.phone | escape | split: ' ' -%}
+                              {%- for part in phone_parts -%}<span>{{ part }}</span>{% unless forloop.last %} {% endunless %}{%- endfor -%}
                             </span>
                           </li>
                         {%- endif -%}
                         {%- if block.settings.email != blank -%}
                           <li>
                             <span class="link link--text list-menu__item">
-                              {{ block.settings.email | escape }}
+                              {%- assign email_parts = block.settings.email | escape | split: '@' -%}
+                              {%- if email_parts.size == 2 -%}
+                                <span>{{ email_parts[0] }}</span><span>@</span><span>{{ email_parts[1] }}</span>
+                              {%- else -%}
+                                {{ block.settings.email | escape }}
+                              {%- endif -%}
                             </span>
                           </li>
                         {%- endif -%}

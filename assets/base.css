@@ -3675,17 +3675,18 @@ details-disclosure > details {
   margin: 0;
 }
 
-.cart-info-list a {
-  color: inherit;
-  text-decoration: underline;
-  text-underline-offset: 0.2rem;
-}
-
-.cart-info-list a:hover {
-  color: rgb(var(--color-foreground));
-}
-
 .main-page-title,
 .page-title {
   text-align: center;
+}
+
+/* Disable clickable styling and underlines on all email/phone links site-wide */
+a[href^="mailto:"],
+a[href^="tel:"],
+a[x-apple-data-detectors],
+.cart-info-list a {
+  color: inherit !important;
+  text-decoration: none !important;
+  pointer-events: none !important;
+  cursor: text !important;
 }
