@@ -227,9 +227,6 @@
                         <td class="cart-item__totals right" role="cell" headers="CartDrawer-ColumnTotal">
                           {%- render 'loading-spinner' -%}
                           <div class="cart-item__price-wrapper">
-                            {%- if item.variant.compare_at_price > item.variant.price -%}
-                              <span class="cart-item__vurdering-price">Vurdering {{ item.variant.compare_at_price | times: item.quantity | money }}</span>
-                            {%- endif -%}
                             {%- if item.original_line_price != item.final_line_price -%}
                               <div class="cart-item__discounted-prices">
                                 <span class="visually-hidden">
@@ -573,23 +570,7 @@
             elsif cart.total_discount > 0
               assign has_bundle_discount = true
             endif
-
-            assign total_vurdering = 0
-            for item in cart.items
-              if item.variant.compare_at_price > item.variant.price
-                assign line_v = item.variant.compare_at_price | times: item.quantity
-              else
-                assign line_v = item.original_line_price
-              endif
-              assign total_vurdering = total_vurdering | plus: line_v
-            endfor
           -%}
-          {%- if total_vurdering > effective_total -%}
-            <div class="totals totals--vurdering" role="status">
-              <span class="totals__vurdering-label">Vurdering i alt</span>
-              <span class="totals__vurdering-value">{{ total_vurdering | money_with_currency }}</span>
-            </div>
-          {%- endif -%}
           {%- if has_bundle_discount -%}
             <div class="totals totals--discount" role="status">
               <span class="totals__discount-label">Rabat (3+ numre)</span>
