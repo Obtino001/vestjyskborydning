@@ -38,3 +38,28 @@
     justify-content: flex-end;
   }
 }
+
+.cart-item__vurdering-price {
+  display: block;
+  font-size: 1.15rem;
+  line-height: 1.25;
+  font-weight: 400;
+  color: #6b6b6b;
+  white-space: nowrap;
+  margin-bottom: 0.15rem;
+}
+
+.totals--vurdering {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.35rem;
+  font-size: 1.25rem;
+  line-height: 1.3;
+  font-weight: 400;
+  color: #6b6b6b;
+}
+
+.totals--vurdering > * {
+  font-size: 1.25rem;
+}
