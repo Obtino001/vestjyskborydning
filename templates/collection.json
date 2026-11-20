@@ -26,10 +26,17 @@
             "heading": "<strong>Boet efter Agnete Ravn</strong>&nbsp;",
             "heading_size": "h1"
           }
+        },
+        "text_74eUbU": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Smykkebutik, Lemvig. Kataloget er åbent indtil søndag 29. november kl. 18.00. Herefter sælges intet.</p>"
+          }
         }
       },
       "block_order": [
-        "heading_AExJiF"
+        "heading_AExJiF",
+        "text_74eUbU"
       ],
       "settings": {
         "desktop_content_position": "center",
@@ -62,8 +69,8 @@
     }
   },
   "order": [
-    "banner",
     "rich_text_P7Eqq7",
+    "banner",
     "product-grid"
   ]
 }
