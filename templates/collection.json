@@ -9,14 +9,6 @@
  */
 {
   "sections": {
-    "banner": {
-      "type": "main-collection-banner",
-      "settings": {
-        "show_collection_description": false,
-        "show_collection_image": false,
-        "color_scheme": "scheme-1"
-      }
-    },
     "rich_text_P7Eqq7": {
       "type": "rich-text",
       "blocks": {
@@ -30,7 +22,7 @@
         "text_74eUbU": {
           "type": "text",
           "settings": {
-            "text": "<p>Smykkebutik, Lemvig. Kataloget er åbent indtil søndag 29. november kl. 18.00. Herefter sælges intet.</p>"
+            "text": "<p>Smykkebutik, Lemvig. Kataloget indeholder ringe, øreringe og halskæder. Kataloget er åbent indtil søndag 29. november kl. 18.00. Herefter sælges intet.</p>"
           }
         }
       },
@@ -45,6 +37,14 @@
         "full_width": true,
         "padding_top": 20,
         "padding_bottom": 0
+      }
+    },
+    "banner": {
+      "type": "main-collection-banner",
+      "settings": {
+        "show_collection_description": false,
+        "show_collection_image": false,
+        "color_scheme": "scheme-1"
       }
     },
     "product-grid": {
